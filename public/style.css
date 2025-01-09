@@ -1,0 +1,28 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+}
+
+ul {
+    display: flex;
+}
+
+li {
+    margin: 5rem;
+}
+
+a {
+    font-size: 50px;
+    color: black;
+}
+
+.active {
+    border-bottom: solid red 3px;
+}

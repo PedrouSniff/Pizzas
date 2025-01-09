@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block main %}
+
+    <h1>form</h1>
+    {{form_start(pizzaform)}}
+    <button>Envoyer</button>
+    {{form_end(pizzaform)}}
+
+    {% for pizza in pizzas %}
+        <h1>{{ pizza.nom }}</h1>
+        <p> {{ pizza.ingredient }} </p>
+    {% endfor %}
+
+{% endblock %}
