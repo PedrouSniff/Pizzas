@@ -3,15 +3,33 @@
 {% block title %}Accueil{% endblock %}
 
 {% block main %}
+    <section>
 
-    <h1>form</h1>
-    {{form_start(pizzaform)}}
-    <button>Envoyer</button>
-    {{form_end(pizzaform)}}
+        <h1>Formulaire d'ajout de pizza :</h1>
+        {{form_start(pizzaform)}}
+            {{form_widget(pizzaform)}}
+            <button>Envoyer</button>
+        {{form_end(pizzaform)}}
+        <div class="pizza">
 
-    {% for pizza in pizzas %}
-        <h1>{{ pizza.nom }}</h1>
-        <p> {{ pizza.ingredient }} </p>
-    {% endfor %}
+            {% for pizza in pizzas %}
+                <h2>Nom : {{ pizza.nom }}</h2>
+                <p>Ingrédient : {{ pizza.ingredient }}</p>
+                <p>Type de pâte : {{pizza.pates.types}}</p>
+                <p>Suppléments : 
+                    {% for %}
+                        
+                    {% endfor %}
+                </p>
+                <a class="modifier" href="{{ path('app_update', {'id': pizza.id}) }}">modifier</a>
 
+                <form method="POST" onsubmit="return confirm('Confirmer la suppression ?')"
+                    action="{{ path('app_delete', {'id': pizza.id}) }}">
+                    <input type="hidden" name="_method" value="delete"> 
+                    <input type="hidden" name="_token" value="{{ csrf_token('SUP' ~ pizza.id) }}">
+                    <input id="delete" type="submit" value="Supprimer"> 
+                </form>
+            {% endfor %}
+        </div>
+    </section>
 {% endblock %}
