@@ -21,8 +21,8 @@ class PizzaType extends AbstractType
 
                 'choice_label'=>'types',
             ]);
+    }
 
-            
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
