@@ -2,22 +2,24 @@
 
 namespace App\Repository;
 
-use App\Entity\Ingredients;
+use App\Entity\ClassiqueIng;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Ingredients>
+ * @extends ServiceEntityRepository<ClassiqueIng>
  */
-class IngredientsRepository extends ServiceEntityRepository
+class ClassiqueIngRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Ingredients::class);
+        parent::__construct($registry, ClassiqueIng::class);
+
+
     }
 
     //    /**
-    //     * @return Ingredients[] Returns an array of Ingredients objects
+    //     * @return ClassiqueIng[] Returns an array of ClassiqueIng objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +33,7 @@ class IngredientsRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Ingredients
+    //    public function findOneBySomeField($value): ?ClassiqueIng
     //    {
     //        return $this->createQueryBuilder('i')
     //            ->andWhere('i.exampleField = :val')

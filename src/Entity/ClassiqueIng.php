@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\IngredientsRepository;
+use App\Repository\ClassiqueIngRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: IngredientsRepository::class)]
-class Ingredients
+#[ORM\Entity(repositoryClass: ClassiqueIngRepository::class)]
+class ClassiqueIng
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -19,15 +19,16 @@ class Ingredients
     private ?string $classique = null;
 
     /**
-     * @var Collection<int, pizza>
+     * @var Collection<int, Pizza>
      */
-    #[ORM\ManyToMany(targetEntity: pizza::class, inversedBy: 'ingredients')]
-    private Collection $ingredients;
+    #[ORM\ManyToMany(targetEntity: Pizza::class, mappedBy: 'classiqueIng')]
+    private Collection $pizzas;
 
     public function __construct()
     {
-        $this->ingredients = new ArrayCollection();
+        $this->pizzas = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -47,26 +48,30 @@ class Ingredients
     }
 
     /**
-     * @return Collection<int, pizza>
+     * @return Collection<int, Pizza>
      */
-    public function getIngredients(): Collection
+    public function getPizzas(): Collection
     {
-        return $this->ingredients;
+        return $this->pizzas;
     }
 
-    public function addIngredient(pizza $ingredient): static
+    public function addPizza(Pizza $pizza): static
     {
-        if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients->add($ingredient);
+        if (!$this->pizzas->contains($pizza)) {
+            $this->pizzas->add($pizza);
+            $pizza->addClassiqueIng($this);
         }
 
         return $this;
     }
 
-    public function removeIngredient(pizza $ingredient): static
+    public function removePizza(Pizza $pizza): static
     {
-        $this->ingredients->removeElement($ingredient);
+        if ($this->pizzas->removeElement($pizza)) {
+            $pizza->removeClassiqueIng($this);
+        }
 
         return $this;
     }
+
 }

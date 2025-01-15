@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Pizza;
 use App\Form\PizzaType;
 use App\Repository\PizzaRepository;

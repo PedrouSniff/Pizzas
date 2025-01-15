@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use App\Repository\PizzaRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PizzaRepository::class)]
+#[Vich\Uploadable]
 class Pizza
 {
     #[ORM\Id]
@@ -25,17 +28,27 @@ class Pizza
     #[ORM\JoinColumn(nullable: false)]
     private ?Pates $pates = null;
 
+    #[Vich\UploadableField(mapping: 'images', fileNameProperty: 'imageName')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
     /**
-     * @var Collection<int, Ingredients>
+     * @var Collection<int, classiqueIng>
      */
-    #[ORM\ManyToMany(targetEntity: Ingredients::class, mappedBy: 'ingredients')]
-    private Collection $ingredients;
+    #[ORM\ManyToMany(targetEntity: ClassiqueIng::class, inversedBy: 'pizzas')]
+    private Collection $classiqueIng;
 
     public function __construct()
     {
-        $this->ingredients = new ArrayCollection();
+        $this->classiqueIng = new ArrayCollection();
     }
 
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -77,29 +90,51 @@ class Pizza
         return $this;
     }
 
-    /**
-     * @return Collection<int, Ingredients>
-     */
-    public function getIngredients(): Collection
+    public function setImageFile(?File $imageFile = null): void
     {
-        return $this->ingredients;
+        $this->imageFile = $imageFile;
+
+        if ($imageFile) {
+            // Si un fichier est chargé, met à jour la date
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
-    public function addIngredient(Ingredients $ingredient): static
+    public function getImageFile(): ?File
     {
-        if (!$this->ingredients->contains($ingredient)) {
-            $this->ingredients->add($ingredient);
-            $ingredient->addIngredient($this);
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+    /**
+     * @return Collection<int, classiqueIng>
+     */
+    public function getClassiqueIng(): Collection
+    {
+        return $this->classiqueIng;
+    }
+
+    public function addClassiqueIng(classiqueIng $classiqueIng): static
+    {
+        if (!$this->classiqueIng->contains($classiqueIng)) {
+            $this->classiqueIng->add($classiqueIng);
         }
 
         return $this;
     }
 
-    public function removeIngredient(Ingredients $ingredient): static
+    public function removeClassiqueIng(classiqueIng $classiqueIng): static
     {
-        if ($this->ingredients->removeElement($ingredient)) {
-            $ingredient->removeIngredient($this);
-        }
+        $this->classiqueIng->removeElement($classiqueIng);
 
         return $this;
     }

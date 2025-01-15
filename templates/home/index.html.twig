@@ -4,29 +4,42 @@
 
 {% block main %}
     <section>
+        {% if is_granted('ROLE_ADMIN') %}
+            <h1>Formulaire d'ajout de pizza :</h1>
+            {{form_start(pizzaform)}}
+                {{form_widget(pizzaform)}}
+                <button>Envoyer</button>
+            {{form_end(pizzaform)}}
+        {% endif %}
 
-        <h1>Formulaire d'ajout de pizza :</h1>
-        {{form_start(pizzaform)}}
-            {{form_widget(pizzaform)}}
-            <button>Envoyer</button>
-        {{form_end(pizzaform)}}
+        {% if app.user == null %}
+            <h1>Nos Pizzas :</h1>
+        {% endif %}
+        {% if is_granted('ROLE_USER') %}
+            <h1>Nos Pizzas :</h1>
+        {% endif %}
+
         <div class="pizza">
 
             {% for pizza in pizzas %}
                 <h2>Nom : {{ pizza.nom }}</h2>
+                <img src="{{asset('images/'~ pizza.imageName)}}" alt="{{pizza.imageName}}">
                 <p>Ingrédient : {{ pizza.ingredient }}</p>
-                <p>Type de pâte : {{pizza.pates.types}}</p>
-                <p>Suppléments : 
-                
-                </p>
-                <a class="modifier" href="{{ path('app_update', {'id': pizza.id}) }}">modifier</a>
+                <p>Type de pâte : {{pizza.pates.types}}</p> 
+                {% for ClassiqueIng in pizza.ClassiqueIng %}
+                    <p>Supplément : {{ClassiqueIng.classique}}</p>
+                {% endfor %}
 
-                <form method="POST" onsubmit="return confirm('Confirmer la suppression ?')"
-                    action="{{ path('app_delete', {'id': pizza.id}) }}">
-                    <input type="hidden" name="_method" value="delete"> 
-                    <input type="hidden" name="_token" value="{{ csrf_token('SUP' ~ pizza.id) }}">
-                    <input id="delete" type="submit" value="Supprimer"> 
-                </form>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a class="modifier" href="{{ path('app_update', {'id': pizza.id}) }}">modifier</a>
+                    <form method="POST" onsubmit="return confirm('Confirmer la suppression ?')"
+                        action="{{ path('app_delete', {'id': pizza.id}) }}">
+                        <input type="hidden" name="_method" value="delete"> 
+                        <input type="hidden" name="_token" value="{{ csrf_token('SUP' ~ pizza.id) }}">
+                        <input id="delete" type="submit" value="Supprimer"> 
+                    </form>
+                {% endif %}
+
             {% endfor %}
         </div>
     </section>

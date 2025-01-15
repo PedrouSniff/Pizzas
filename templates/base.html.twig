@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="stylesheet" href={{asset('style.css')}}>
+        {{ encore_entry_link_tags('app') }}
     </head>
     <body>
         {% block header %}
@@ -11,10 +11,19 @@
                 <nav>
                     <ul>
                         <li><a class="{% if app.request.attributes.get('_route') == 'app_home' %} active {% endif %}" href={{ path('app_home')}}>Accueil</a></li>
+
+                        {% if app.user == null %}
+                            <li><a class="{% if app.request.attributes.get('_route') == 'app_inscription' %} active {% endif %}" href={{ path('app_inscription')}}>Inscription</a></li>
+                            <li><a class="{% if app.request.attributes.get('_route') == 'app_login' %} active {% endif %}" href={{ path('app_login')}}>Login</a></li>
+                        {% endif %}
+
+                        {% if is_granted('ROLE_USER') %}
+                            <li><a class="{% if app.request.attributes.get('_route') == 'app_logout' %} active {% endif %}" href={{ path('app_logout')}}>Déconnexion</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             </header>
-        {% endblock %}
+        {% endblock %}  
         {% block main %}
 
         {% endblock %}
